@@ -1,6 +1,17 @@
 version: '3'
 
 services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres
+    ports:
+      - 5432:5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    networks:
+      - app
+
   web:
     container_name: web
     build: .
@@ -8,9 +19,16 @@ services:
       - 8000:8000
     volumes:
       - ./:/app
-    command: python manage.py runserver 0.0.0.0:8000
+    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     networks:
       - app
+    environment:
+      - POSTGRES_NAME=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    restart: always
+    depends_on:
+      - postgres
 
   prometheus:
     image: prom/prometheus:latest
@@ -52,6 +70,18 @@ services:
       - 9100:9100
     networks:
       - app
+  
+  postgres-exporter:
+    image: wrouesnel/postgres_exporter
+    container_name: postgres-exporter
+    ports:
+      - 9187:9187
+    environment:
+      - DATA_SOURCE_NAME=postgresql://postgres:postgres@postgres:5432/postgres?sslmode=disable
+    networks:
+      - app
+    depends_on:
+      - postgres
 
 volumes:
   prometheus-data:

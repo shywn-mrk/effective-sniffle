@@ -1,5 +1,7 @@
 FROM python:3.8
 
+ENV PYTHONUNBUFFERED=1
+
 RUN pip install --upgrade pip
 RUN apt-get update \
     && apt-get -y install libpq-dev gcc
@@ -11,5 +13,3 @@ WORKDIR /app
 RUN pip install -r requirements.txt
 
 COPY ./ /app/
-
-RUN python manage.py migrate

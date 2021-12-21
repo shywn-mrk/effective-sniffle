@@ -10,7 +10,7 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
     networks:
-      - app
+      - net
 
   web:
     container_name: web
@@ -21,7 +21,7 @@ services:
       - ./:/app
     command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     networks:
-      - app
+      - net
     environment:
       - POSTGRES_NAME=postgres
       - POSTGRES_USER=postgres
@@ -41,7 +41,7 @@ services:
       - --config.file=/etc/prometheus/prometheus.yml
     restart: unless-stopped
     networks:
-      - app
+      - net
 
   grafana:
     image: grafana/grafana:latest
@@ -51,7 +51,7 @@ services:
       - grafana-data:/var/lib/grafana
     restart: unless-stopped
     networks:
-      - app
+      - net
   
   node-exporter:
     image: prom/node-exporter:latest
@@ -69,7 +69,7 @@ services:
     ports:
       - 9100:9100
     networks:
-      - app
+      - net
   
   postgres-exporter:
     image: wrouesnel/postgres_exporter
@@ -79,7 +79,7 @@ services:
     environment:
       - DATA_SOURCE_NAME=postgresql://postgres:postgres@postgres:5432/postgres?sslmode=disable
     networks:
-      - app
+      - net
     depends_on:
       - postgres
 
@@ -88,4 +88,4 @@ volumes:
   grafana-data:
 
 networks:
-  app:
+  net:

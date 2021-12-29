@@ -9,6 +9,7 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    restart: always
     networks:
       - net
 
@@ -76,6 +77,7 @@ services:
     container_name: postgres-exporter
     ports:
       - 9187:9187
+    restart: unless-stopped
     environment:
       - DATA_SOURCE_NAME=postgresql://postgres:postgres@postgres:5432/postgres?sslmode=disable
     networks:

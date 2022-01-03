@@ -13,4 +13,11 @@ scrape_configs:
   - job_name: 'monitoring-postgres'
     static_configs:
       - targets: ['postgres-exporter:9187']
+
+  - job_name: 'monitoring-rabbitmq'
+    static_configs:
+      - targets: ['rabbitmq:15692']
   
+  - job_name: 'monitoring-redis'
+    static_configs:
+      - targets: ['redis-exporter:9121']

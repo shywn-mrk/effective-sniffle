@@ -8,7 +8,7 @@ services:
       - 8000:8000
     volumes:
       - ./:/app
-    command: bash -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    entrypoint: /app/scripts/entrypoint.sh
     networks:
       - net
     environment:

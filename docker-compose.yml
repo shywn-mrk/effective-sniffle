@@ -129,6 +129,17 @@ services:
     networks:
       - net
   
+  nginx:
+    container_name: nginx
+    build: ./nginx
+    ports:
+      - 80:80
+    depends_on:
+      - web
+    networks:
+      - net
+    restart: unless-stopped
+
 volumes:
   postgres-data:
   prometheus-data:
